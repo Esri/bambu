@@ -1,6 +1,6 @@
 # Bambu.js
 
-#### A library for generating thematic carto.js styles and Esri renderers from arrays of data
+##### A library for generating thematic carto.js styles and Esri renderers from arrays of data
 
 Bambu is very simple Javascript library for classifying arrays of data, and can be used in Node.js or within a Browwer. Bambu.js will create Carto.js style strings OR simple classified Esri renderers. 
 
