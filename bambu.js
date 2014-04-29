@@ -1,10 +1,13 @@
 /** 
-  Bambu generates thematic carto.js strings
+  Bambu generates thematic carto.js strings and Esri simple renderers.
 
-  Currently under active development and is being used to style 
-  vector tile json data in modestmaps via Carto.js & VECNIK.js.
+  Currently under active development.
 
-  MIT License - Copryright 2012 
+  Copyright 2014 Esri
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0 
 */
 function Bambu() {
 
