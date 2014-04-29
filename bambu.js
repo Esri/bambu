@@ -13,7 +13,7 @@ function Bambu() {
 
   // defaults 
   var colors = 'Reds',
-    classification = 'quantile',
+    classification = 'equal_interval',
     classes = 5,
     style = '',
     data = [],
@@ -32,7 +32,13 @@ function Bambu() {
   // returnable class
   var bambu = function(){};
 
-  // regenerates the classification 
+
+
+  /*
+  * Generates class breaks to be based to style generators
+  * Defaults to "Equal Interval"
+  *
+  */
   bambu.classify = function(){
 
     var vals = data.sort(function(a, b) {
@@ -70,6 +76,13 @@ function Bambu() {
     return out;
   }
 
+
+
+  /*
+  * Generate CartoCSS
+  *
+  * TODO: create carto css for SIZE option
+  */
   bambu.createCartoStyle = function(breaks) {
     var bins = [];
     if ( type === "size" ) {
@@ -87,6 +100,13 @@ function Bambu() {
     return style;
   }
 
+
+
+  /*
+  * Generate Esri simple renderer
+  *
+  *
+  */
   bambu.createEsriStyle = function(breaks, vals) {
 
     function defaultSymbol(geomType){
@@ -213,6 +233,13 @@ function Bambu() {
       return style;
   }
 
+
+
+  /*
+  * bambu options
+  *
+  *
+  */
   bambu.output = function(x, gen){
     if (!arguments.length) return output;
     output = x;
@@ -289,6 +316,11 @@ function Bambu() {
   };
 
 
+  /*
+  *
+  * Helpers 
+  *
+  */
   function rgb2hex(rgb){
     rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
     return (rgb && rgb.length === 4) ? "#" +
