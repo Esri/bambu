@@ -21,7 +21,7 @@ function Bambu() {
     type = "color",
     id = '#',
     field = 'null',
-    opacity = 1,
+    opacity = 255,
     default_fill,
     stroke = [224, 224, 224],
     fill = [41,128,185,255]
