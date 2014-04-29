@@ -149,7 +149,6 @@ function Bambu() {
     }
 
     function esriColor( colors , alpha ){
-      console.log('[ colors[0], colors[1], colors[2], alpha ]', [ colors[0], colors[1], colors[2], alpha ])
       return [ colors[0], colors[1], colors[2], alpha ];
     }
 
