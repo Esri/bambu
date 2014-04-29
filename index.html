@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bambu.js DEV</title>
+  
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="colorbrewer.js"></script>
+  <script src="bambu.js"></script>
+  <script>
+
+  $(document).ready(function() {
+    // start with a simple array of data 
+    function carto() {
+      var data = [0,35,2,41,46,10,9,5,3,23,55,76,64,42,22,22,37,6,77,8,3,1,3,4,5,11,14,17,34];
+      
+      var bambu = Bambu()
+        .id('test')
+        .field('val')
+        .data(data, true) // passing true forces a classification to run, creating a style string
+        .classification('quantile')
+        .output('CartoCSS')
+        .type('color')
+        .colors('Reds')
+        .classes(5);
+      
+      // to access the style string we call style() 
+      var style = bambu.style();
+      
+      // we can update the style very easily by calling any of the methods above
+      var new_style = bambu.colors('Blues').classify();
+      
+      // depending on the size of our data array we can choose to delay a re-classification
+      // or force it generate a new one
+      bambu.colors('YlGnBu', false).classes(9); // delays re-classification
+      
+      var style = bambu.classify();
+      console.log(style);
+
+      $('#carto code').html(style);
+    } 
+
+
+    function esri() {
+      var data = [0,1000];
+      
+      var bambu = Bambu()
+        .id('test')
+        .field('val')
+        .data(data, true)
+        .output('Esri')
+        .type('size')
+        .geomType('esriGeometryPoint')
+        .classification('equal_interval')
+        .colors('Reds')
+        .classes(5);
+      
+      // to access the style string we call style() 
+      var style = bambu.style();
+      
+      // we can update the style very easily by calling any of the methods above
+      var new_style = bambu.colors('Blues').classify();
+      
+      // depending on the size of our data array we can choose to delay a re-classification
+      // or force it generate a new one
+      bambu.colors('YlGnBu', false).classes(9); // delays re-classification
+      
+      var style = bambu.classify();
+      console.log(style);
+
+      $('#esri code').html( JSON.stringify(style) );
+    } 
+
+
+    carto();
+    esri();
+  });
+
+  </script>
+  <style>
+    pre {
+        font-family: "Courier 10 Pitch", Courier, monospace;
+        font-size: 95%;
+        line-height: 140%;
+        white-space: pre;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+    }       
+
+    code {
+        font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+        font-size: 95%;
+        line-height: 140%;
+        white-space: pre;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+        background: #faf8f0;
+        width:80%;
+    }
+
+    code {
+        display: block;
+        padding: 0.5em 1em;
+        border: 1px solid #bebab0;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Hello Bambu.js World</h2>
+
+  <h4>CartoCSS<h4>
+  <div class="code" id="carto"><pre><code></code></pre></div>
+
+  <h4>Esri Renderer<h4>
+  <div class="code" id="esri"><pre><code></code></pre></div>
+
+</body>
+</html>
+
