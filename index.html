@@ -4,6 +4,7 @@
 <title>Bambu.js DEV</title>
   
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="ramps.js"></script>
   <script src="colorbrewer/colorbrewer.js"></script>
   <script src="bambu.js"></script>
   <script>
@@ -70,9 +71,39 @@
       $('#esri code').html( JSON.stringify(style) );
     } 
 
+    function esriPoly() {
+      var data = [0,12000];
+      
+      var bambu = Bambu()
+        .field( "Test" )
+        .colors('seq-yellow-orange-red')
+        .data(data, true)
+        .output('Esri')
+        .type( "color" )
+        .geomType( "esriGeometryPolygon" )
+        .classification('equal_interval')
+        .classes(5);
+      
+      // to access the style string we call style() 
+      var style = bambu.style();
+      
+      // we can update the style very easily by calling any of the methods above
+      //var new_style = bambu.colors('Blues').classify();
+      
+      // depending on the size of our data array we can choose to delay a re-classification
+      // or force it generate a new one
+      //bambu.colors('YlGnBu', false).classes(9); // delays re-classification
+      
+      var style = bambu.classify();
+      console.log(style);
+
+      $('#esripoly code').html( JSON.stringify(style) );
+    } 
+
 
     carto();
     esri();
+    esriPoly();
   });
 
   </script>
@@ -113,7 +144,10 @@
   <h4>CartoCSS<h4>
   <div class="code" id="carto"><pre><code></code></pre></div>
 
-  <h4>Esri Renderer<h4>
+  <h4>Esri Renderer Polygon<h4>
+  <div class="code" id="esripoly"><pre><code></code></pre></div>
+
+  <h4>Esri Renderer Point<h4>
   <div class="code" id="esri"><pre><code></code></pre></div>
 
 </body>

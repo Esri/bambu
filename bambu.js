@@ -12,13 +12,13 @@
 function Bambu() {
 
   // defaults 
-  var colors = 'Reds',
+  var colors = 'div-orange-yellow-pink',
     classification = 'equal_interval',
     classes = 5,
     style = '',
     data = [],
     output = "Esri",
-    type = "color",
+    type = "size",
     id = '#',
     field = 'null',
     opacity = 255,
@@ -197,8 +197,6 @@ function Bambu() {
 
     if ( type === "size" ) {
 
-      //var breaks = generateBreaks( classes, style.field.min, style.field.max);
-  
       style = {
         type: "classBreaks",
         defaultSymbol: esriSymbol( geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[0] : fill), size),
@@ -226,7 +224,42 @@ function Bambu() {
 
     } else if ( type === "color" ) {
 
-      style = 'Esri Renderer COLOR!';
+      ramp = [];
+      
+      for (var b = 0; b < breaks.length; b++){
+        var break_val = breaks[b];
+        if ( Ramps.colors[ colors ][ 6 ][b] ) {
+          var c = hexToRgb(Ramps.colors[ colors ][ 6 ][b]);
+          ramp.push( c );
+        }
+      }
+
+      style = {
+        type: "classBreaks",
+        defaultSymbol: esriSymbol( geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[0] : fill), size),
+        defaultLabel: "Other Values",
+        classificationMethod: 'esriClassifyEqualInterval',
+        field: field,
+        minValue: vals[0]
+      };
+  
+      var i, radius, maxVal, breakInfo;
+  
+      style.classBreakInfos = [];
+  
+      breaks.forEach( function(b, i){
+        maxVal = b;
+        radius = size * (i+1);
+        console.log('i', i);
+        console.log('color on ramp', ramp[i])
+        breakInfo = {
+          classMaxValue: maxVal,
+          symbol: esriSymbol(geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[i] : fill), opacity, radius)
+        };
+        style.classBreakInfos.push(breakInfo);
+      });
+
+      return style;
 
     }
       return style;
@@ -326,6 +359,23 @@ function Bambu() {
       ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+  }
+
+  function hexToRgb(hex) {
+    var arr = [];
+    hex = hex.replace(/#/g, '');
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    var a = opacity;
+    
+    arr.push(parseInt(r));
+    arr.push(parseInt(g));
+    arr.push(parseInt(b));
+    arr.push(parseInt(a));
+
+    return arr;
   }
 
 
