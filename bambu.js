@@ -9,6 +9,7 @@
 
   http://www.apache.org/licenses/LICENSE-2.0 
 */
+
 function Bambu() {
 
   // defaults 
@@ -24,8 +25,8 @@ function Bambu() {
     opacity = 255,
     default_fill,
     stroke = [224, 224, 224],
-    fill = [41,128,185,255]
-    size = 10,
+    fill = [41,128,185,255],
+    size = 2,
     width = 1,
     geomType = 'esriGeometryPoint';
 
@@ -45,25 +46,23 @@ function Bambu() {
       return a - b;
     });
 
+    var breaks = [], i;
     switch (classification){
       case 'quantile':
-          var breaks = [];
+        for (i = 0; i < classes; i++) {
+          breaks.push( vals[Math.ceil(i * (vals.length - 1) / classes)]);
+        }
 
-          for (var i = 0; i < classes; i++) {
-            breaks.push( vals[Math.ceil(i * (vals.length - 1) / classes)])
-          }
-
-          break;
+        break;
       case 'equal_interval':
-          var breaks = [],
-            range = vals[vals.length - 1] - vals[0];
+        range = vals[vals.length - 1] - vals[0];
 
-          for (var i=0; i < classes; i++) {
-            breaks.push(Math.floor(vals[0] + i * range / classes))
-          }
+        for (i=0; i < classes; i++) {
+          breaks.push(Math.floor(vals[0] + i * range / classes));
+        }
 
-          breaks[classes] = vals[vals.length - 1];
-          break;
+        breaks[classes] = vals[vals.length - 1] + 1;
+        break;
     }
 
     var out;
@@ -74,7 +73,7 @@ function Bambu() {
     }
 
     return out;
-  }
+  };
 
 
 
@@ -98,7 +97,7 @@ function Bambu() {
       style = style + bins.join(' ') + '}';
     }
     return style;
-  }
+  };
 
 
 
@@ -195,6 +194,7 @@ function Bambu() {
       return symbol;
     }
 
+    var i, radius, maxVal, breakInfo;
     if ( type === "size" ) {
 
       style = {
@@ -205,8 +205,6 @@ function Bambu() {
         field: field,
         minValue: vals[0]
       };
-  
-      var i, radius, maxVal, breakInfo;
   
       style.classBreakInfos = [];
   
@@ -228,8 +226,8 @@ function Bambu() {
       
       for (var b = 0; b < breaks.length; b++){
         var break_val = breaks[b];
-        if ( Ramps.colors[ colors ][ 6 ][b] ) {
-          var c = hexToRgb(Ramps.colors[ colors ][ 6 ][b]);
+        if ( Ramps.colors[ colors ][ classes + 1 ][b] ) {
+          var c = hexToRgb(Ramps.colors[ colors ][ classes + 1 ][b]);
           ramp.push( c );
         }
       }
@@ -243,15 +241,11 @@ function Bambu() {
         minValue: vals[0]
       };
   
-      var i, radius, maxVal, breakInfo;
-  
       style.classBreakInfos = [];
   
       breaks.forEach( function(b, i){
         maxVal = b;
         radius = size * (i+1);
-        console.log('i', i);
-        console.log('color on ramp', ramp[i])
         breakInfo = {
           classMaxValue: maxVal,
           symbol: esriSymbol(geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[i] : fill), opacity, radius)
@@ -260,10 +254,9 @@ function Bambu() {
       });
 
       return style;
-
     }
-      return style;
-  }
+    return style;
+  };
 
 
 
@@ -370,10 +363,10 @@ function Bambu() {
     var b = bigint & 255;
     var a = opacity;
     
-    arr.push(parseInt(r));
-    arr.push(parseInt(g));
-    arr.push(parseInt(b));
-    arr.push(parseInt(a));
+    arr.push(parseInt(r, 10));
+    arr.push(parseInt(g, 10));
+    arr.push(parseInt(b, 10));
+    arr.push(parseInt(a, 10));
 
     return arr;
   }
