@@ -157,7 +157,7 @@ function Bambu() {
         symbol = esriFillSymbol(fill, stroke, opacity);
       }
       else if (geometryType === "esriGeometryPolyline"){
-        symbol = esriLineSymbol(stroke, opacity);
+        symbol = esriLineSymbol(fill, opacity);
       }
       else{
         symbol = esriPointSymbol( stroke, fill, opacity, radius);
@@ -173,7 +173,7 @@ function Bambu() {
       return symbol;
     }
 
-    function esriLineSymbol( stroke, opacity, width ){
+    function esriLineSymbol( stroke, opacity ){
       var symbol = defaultSymbol("esriGeometryPolyline");
       if (! stroke){
         return symbol;
@@ -232,9 +232,13 @@ function Bambu() {
         }
       }
 
+      console.log('--------')
+      console.log('ramper', ramp);
+      console.log('geomtype', geomType);
+
       style = {
         type: "classBreaks",
-        defaultSymbol: esriSymbol( geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[0] : fill), size),
+        defaultSymbol: esriSymbol( geomType, stroke, (( geomType == 'esriGeometryPolygon' || geomType == 'esriGeometryPolyline') ? ramp[0] : fill), size),
         defaultLabel: "Other Values",
         classificationMethod: 'esriClassifyEqualInterval',
         field: field,
@@ -246,9 +250,10 @@ function Bambu() {
       breaks.forEach( function(b, i){
         maxVal = b;
         radius = size * (i+1);
+        console.log('ramp[i]', ramp[i]);
         breakInfo = {
           classMaxValue: maxVal,
-          symbol: esriSymbol(geomType, stroke, (( geomType == 'esriGeometryPolygon') ? ramp[i] : fill), opacity, radius)
+          symbol: esriSymbol(geomType, stroke, (( geomType == 'esriGeometryPolygon' || geomType == 'esriGeometryPolyline') ? ramp[i] : fill), opacity, radius)
         };
         style.classBreakInfos.push(breakInfo);
       });
